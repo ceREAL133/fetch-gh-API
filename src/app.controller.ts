@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { AppService } from './app.service';
 
 @Controller()
@@ -6,7 +6,22 @@ export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getApi(): any {
+    console.log(this.appService.getApi());
+  }
+
+  @Get('commits')
+  getCommits() {
+    console.log(this.appService.getCommits());
+  }
+
+  @Get('branches')
+  getBranches() {
+    console.log(this.appService.getBranches());
+  }
+
+  @Get('branches/:name')
+  getBranchByName(@Param('name') name) {
+    console.log(this.appService.getBranchByName(name));
   }
 }
