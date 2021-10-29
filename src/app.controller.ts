@@ -24,4 +24,9 @@ export class AppController {
   getBranchByName(@Param('name') name) {
     console.log(this.appService.getBranchByName(name));
   }
+
+  // @Get('branches/:name/:filterby')
+  // getBranchWithFilter(@Param('name') name, @Param('filter') filter) {
+  //   console.log(this.appService.getBranchWithFilter(name, filter));
+  // }
 }
