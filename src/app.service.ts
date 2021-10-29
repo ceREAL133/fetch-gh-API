@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { response } from 'express';
 
 @Injectable()
 export class AppService {
@@ -42,24 +41,52 @@ export class AppService {
 
   async getBranchByName(name: string) {
     const url = `https://api.github.com/repos/nodejs/node/branches/${name}`;
-    await axios.get(url).then((response: any) => console.log(response.data));
+    const commitsArr: string[] = [];
+    await axios
+      .get(url)
+      .then((response: any) => {
+        commitsArr.push(response.data.commit.sha);
+        console.log('commitsArr');
+        console.log(commitsArr);
+        console.log('commitsArr');
+      })
+      .then(() => {
+        console.log('asdasdsadasdasdasdas');
+
+        let i = 0;
+        do {
+          axios
+            .get(
+              `https://api.github.com/repos/nodejs/node/commits/${commitsArr[i]}`,
+            )
+            .then((response: any) => {
+              console.log(response.data.parents[0].sha),
+                commitsArr.push(response.data.parents[0].sha);
+            });
+
+          i++;
+        } while (i <= 25); // NOT working
+      })
+      .then(() => {
+        console.log(commitsArr);
+      });
   }
 
   // async getCommits(): Promise<any> {
-  //   await axios
-  //     .get('https://api.github.com/repos/nodejs/node/commits')
-  //     .then((response: any) => {
-  //       console.log(
-  //         response.data
-  //           .sort((a, b) =>
-  //             a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-  //           )
-  //           .slice(0, 25)
-  //           .map((commit) => ({
-  //             sha: commit.sha,
-  //             date: commit.commit.committer.date,
-  //           })),
-  //       );
-  //     });
+  // await axios
+  //   .get('https://api.github.com/repos/nodejs/node/commits')
+  //   .then((response: any) => {
+  //     console.log(
+  //       response.data
+  //         .sort((a, b) =>
+  //           a.commit.committer.date > b.commit.committer.date ? -1 : 1,
+  //         )
+  //         .slice(0, 25)
+  //         .map((commit) => ({
+  //           sha: commit.sha,
+  //           date: commit.commit.committer.date,
+  //         })),
+  //     );
+  //   });
   // }
 }
