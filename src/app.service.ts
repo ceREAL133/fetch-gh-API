@@ -58,69 +58,33 @@ export class AppService {
     });
   }
 
-  // async getBranchWithFilter(name: string, filter: string) {
-  //   const url = `https://api.github.com/repos/nodejs/node/commits?per_page=25&sha=${name}`;
+  async getBranchWithFilter(name: string, filter: string) {
+    const url = `https://api.github.com/repos/nodejs/node/commits?per_page=25&sha=${name}`;
 
-  // if (!filter) {
-  //   await axios.get(url).then((response: any) => {
-  //     console.log(
-  //       response.data
-  //         .sort((a, b) =>
-  //           a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-  //         )
-  //         .map((commit) => ({
-  //           author: commit.commit.author.name,
-  //           message: JSON.stringify(commit.commit.message).split('\\')[0],
-  //           sha: commit.sha,
-  //           date: commit.commit.committer.date,
-  //         })),
-  //     );
-  //   });
-  // } else
-  //   if (filter === 'message') {
-  //     await axios.get(url).then((response: any) => {
-  //       console.log(
-  //         response.data
-  //           .sort((a, b) =>
-  //             a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-  //           )
-  //           .map((commit) => ({
-  //             message: JSON.stringify(commit.commit.message).split('\\')[0],
-  //           })),
-  //       );
-  //     });
-  //   } else if (filter === 'hash') {
-  //     await axios.get(url).then((response: any) => {
-  //       console.log(
-  //         response.data
-  //           .sort((a, b) =>
-  //             a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-  //           )
-  //           .map((commit) => ({
-  //             sha: commit.sha,
-  //           })),
-  //       );
-  //     });
-  //   } else {
-  //     throw new Error('this filter is not available');
-  //   }
-  // }
-
-  // async getCommits(): Promise<any> {
-  // await axios
-  //   .get('https://api.github.com/repos/nodejs/node/commits')
-  //   .then((response: any) => {
-  //     console.log(
-  //       response.data
-  //         .sort((a, b) =>
-  //           a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-  //         )
-  //         .slice(0, 25)
-  //         .map((commit) => ({
-  //           sha: commit.sha,
-  //           date: commit.commit.committer.date,
-  //         })),
-  //     );
-  //   });
-  // }
+    await axios.get(url).then((response: any) => {
+      if (filter === 'hash') {
+        console.log(
+          response.data
+            .sort((a, b) =>
+              a.commit.committer.date > b.commit.committer.date ? -1 : 1,
+            )
+            .map((commit) => ({
+              sha: commit.sha,
+            })),
+        );
+      } else if (filter === 'message') {
+        console.log(
+          response.data
+            .sort((a, b) =>
+              a.commit.committer.date > b.commit.committer.date ? -1 : 1,
+            )
+            .map((commit) => ({
+              message: JSON.stringify(commit.commit.message).split('\\')[0],
+            })),
+        );
+      } else {
+        throw new Error('Invalid filter');
+      }
+    });
+  }
 }
