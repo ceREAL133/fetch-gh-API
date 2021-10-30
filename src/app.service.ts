@@ -64,23 +64,15 @@ export class AppService {
     await axios.get(url).then((response: any) => {
       if (filter === 'hash') {
         console.log(
-          response.data
-            .sort((a, b) =>
-              a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-            )
-            .map((commit) => ({
-              sha: commit.sha,
-            })),
+          response.data.map((commit) => ({
+            sha: commit.sha,
+          })),
         );
       } else if (filter === 'message') {
         console.log(
-          response.data
-            .sort((a, b) =>
-              a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-            )
-            .map((commit) => ({
-              message: JSON.stringify(commit.commit.message).split('\\')[0],
-            })),
+          response.data.map((commit) => ({
+            message: JSON.stringify(commit.commit.message).split('\\')[0],
+          })),
         );
       } else {
         throw new Error('Invalid filter');
