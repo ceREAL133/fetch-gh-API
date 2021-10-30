@@ -40,53 +40,43 @@ export class AppService {
   }
 
   async getBranchByName(name: string) {
-    const url = `https://api.github.com/repos/nodejs/node/branches/${name}`;
-    const commitsArr: string[] = [];
-    await axios
-      .get(url)
-      .then((response: any) => {
-        commitsArr.push(response.data.commit.sha);
-        console.log('commitsArr');
-        console.log(commitsArr);
-        console.log('commitsArr');
-      })
-      .then(() => {
-        console.log('asdasdsadasdasdasdas');
+    const url = `https://api.github.com/repos/nodejs/node/commits?per_page=25&sha=${name}`;
 
-        let i = 0;
-        do {
-          axios
-            .get(
-              `https://api.github.com/repos/nodejs/node/commits/${commitsArr[i]}`,
-            )
-            .then((response: any) => {
-              console.log(response.data.parents[0].sha),
-                commitsArr.push(response.data.parents[0].sha);
-            });
-
-          i++;
-        } while (i <= 25); // NOT working
-      })
-      .then(() => {
-        console.log(commitsArr);
-      });
+    await axios.get(url).then((response: any) => {
+      console.log(
+        response.data
+          .sort((a, b) =>
+            a.commit.committer.date > b.commit.committer.date ? -1 : 1,
+          )
+          .map((commit) => ({
+            author: commit.commit.author.name,
+            message: JSON.stringify(commit.commit.message).split('\\')[0],
+            sha: commit.sha,
+            date: commit.commit.committer.date,
+          })),
+      );
+    });
   }
 
-  // async getCommits(): Promise<any> {
-  // await axios
-  //   .get('https://api.github.com/repos/nodejs/node/commits')
-  //   .then((response: any) => {
-  //     console.log(
-  //       response.data
-  //         .sort((a, b) =>
-  //           a.commit.committer.date > b.commit.committer.date ? -1 : 1,
-  //         )
-  //         .slice(0, 25)
-  //         .map((commit) => ({
-  //           sha: commit.sha,
-  //           date: commit.commit.committer.date,
-  //         })),
-  //     );
-  //   });
-  // }
+  async getBranchWithFilter(name: string, filter: string) {
+    const url = `https://api.github.com/repos/nodejs/node/commits?per_page=25&sha=${name}`;
+
+    await axios.get(url).then((response: any) => {
+      if (filter === 'hash') {
+        console.log(
+          response.data.map((commit) => ({
+            sha: commit.sha,
+          })),
+        );
+      } else if (filter === 'message') {
+        console.log(
+          response.data.map((commit) => ({
+            message: JSON.stringify(commit.commit.message).split('\\')[0],
+          })),
+        );
+      } else {
+        throw new Error('Invalid filter');
+      }
+    });
+  }
 }
