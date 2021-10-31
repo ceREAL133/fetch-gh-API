@@ -11,8 +11,8 @@ export class AppService {
       });
   }
 
-  async getCommits(): Promise<any> {
-    await axios
+  async getCommits(): Promise<string> {
+    return await axios
       .get('https://api.github.com/repos/nodejs/node/commits')
       .then((response: any) => {
         return response.data.map((commit, i) => ({
