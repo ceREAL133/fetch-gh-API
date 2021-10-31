@@ -24,6 +24,7 @@
     "node": "14.17.0"
   },
   "dependencies": {
+    "nest": "0.1.6",
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
     "@nestjs/platform-express": "^8.0.0",
