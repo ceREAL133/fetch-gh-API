@@ -12,7 +12,7 @@ export class AppController {
 
   @Get('commits')
   getCommits() {
-    console.log(this.appService.getCommits());
+    return this.appService.getCommits();
   }
 
   @Get('branches')
