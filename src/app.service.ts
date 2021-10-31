@@ -15,13 +15,11 @@ export class AppService {
     await axios
       .get('https://api.github.com/repos/nodejs/node/commits')
       .then((response: any) => {
-        console.log(
-          response.data.map((commit, i) => ({
-            commit_Number: i++,
-            sha: commit.sha,
-            date: commit.commit.committer.date,
-          })),
-        );
+        return response.data.map((commit, i) => ({
+          commit_Number: i++,
+          sha: commit.sha,
+          date: commit.commit.committer.date,
+        }));
       });
   }
 
