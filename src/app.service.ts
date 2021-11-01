@@ -28,9 +28,9 @@ export class AppService {
       .get('https://api.github.com/repos/nodejs/node/branches')
       .then((response: any) => {
         return response.data.map((branch, i) => ({
-          branch: i++,
-          sha: branch.name,
-          date: branch.commit.sha,
+          branch_Number: i++,
+          branch: branch.name,
+          sha: branch.commit.sha,
         }));
       });
   }
