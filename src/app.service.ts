@@ -7,7 +7,7 @@ export class AppService {
     return await axios
       .get('https://api.github.com/repos/nodejs/node')
       .then((response: any) => {
-        return JSON.stringify(response.data, null, 2);
+        return response.data;
       });
   }
 
